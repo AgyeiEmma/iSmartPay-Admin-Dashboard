@@ -48,7 +48,11 @@
             "vaul": "^1.1.2"
       },
       "devDependencies": {
+<<<<<<< HEAD
             "@types/node": "^20.10.0",
+=======
+            "@types/node": "^20.19.21",
+>>>>>>> d9b527f86ba300856ccd1707768378e9ae6caf89
             "@types/react": "^19.2.2",
             "@types/react-dom": "^19.2.2",
             "@vitejs/plugin-react-swc": "^3.10.2",
@@ -57,7 +61,13 @@
       },
       "scripts": {
             "dev": "vite",
+<<<<<<< HEAD
             "build": "vite build",
             "preview": "vite preview"
       }
 }
+=======
+            "build": "vite build"
+      }
+}
+>>>>>>> d9b527f86ba300856ccd1707768378e9ae6caf89

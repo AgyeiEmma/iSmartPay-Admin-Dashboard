@@ -1,7 +1,11 @@
 "use client";
 
 import * as React from "react";
+<<<<<<< HEAD
 import * as SeparatorPrimitive from "@radix-ui/react-separator";
+=======
+import * as SeparatorPrimitive from "@radix-ui/react-separator@1.1.2";
+>>>>>>> d9b527f86ba300856ccd1707768378e9ae6caf89
 
 import { cn } from "./utils";
 

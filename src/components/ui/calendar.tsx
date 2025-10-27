@@ -1,8 +1,13 @@
 "use client";
 
 import * as React from "react";
+<<<<<<< HEAD
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { DayPicker } from "react-day-picker";
+=======
+import { ChevronLeft, ChevronRight } from "lucide-react@0.487.0";
+import { DayPicker } from "react-day-picker@8.10.1";
+>>>>>>> d9b527f86ba300856ccd1707768378e9ae6caf89
 
 import { cn } from "./utils";
 import { buttonVariants } from "./button";

@@ -1,7 +1,11 @@
 "use client";
 
 import * as React from "react";
+<<<<<<< HEAD
 import * as RechartsPrimitive from "recharts";
+=======
+import * as RechartsPrimitive from "recharts@2.15.2";
+>>>>>>> d9b527f86ba300856ccd1707768378e9ae6caf89
 
 import { cn } from "./utils";
 
@@ -56,7 +60,11 @@ function ChartContainer({
         data-chart={chartId}
         className={cn(
           "[&_.recharts-cartesian-axis-tick_text]:fill-muted-foreground [&_.recharts-cartesian-grid_line[stroke='#ccc']]:stroke-border/50 [&_.recharts-curve.recharts-tooltip-cursor]:stroke-border [&_.recharts-polar-grid_[stroke='#ccc']]:stroke-border [&_.recharts-radial-bar-background-sector]:fill-muted [&_.recharts-rectangle.recharts-tooltip-cursor]:fill-muted [&_.recharts-reference-line_[stroke='#ccc']]:stroke-border flex aspect-video justify-center text-xs [&_.recharts-dot[stroke='#fff']]:stroke-transparent [&_.recharts-layer]:outline-hidden [&_.recharts-sector]:outline-hidden [&_.recharts-sector[stroke='#fff']]:stroke-transparent [&_.recharts-surface]:outline-hidden",
+<<<<<<< HEAD
           className
+=======
+          className,
+>>>>>>> d9b527f86ba300856ccd1707768378e9ae6caf89
         )}
         {...props}
       >
@@ -71,7 +79,11 @@ function ChartContainer({
 
 const ChartStyle = ({ id, config }: { id: string; config: ChartConfig }) => {
   const colorConfig = Object.entries(config).filter(
+<<<<<<< HEAD
     ([, config]) => config.theme || config.color
+=======
+    ([, config]) => config.theme || config.color,
+>>>>>>> d9b527f86ba300856ccd1707768378e9ae6caf89
   );
 
   if (!colorConfig.length) {
@@ -94,7 +106,11 @@ ${colorConfig
   })
   .join("\n")}
 }
+<<<<<<< HEAD
 `
+=======
+`,
+>>>>>>> d9b527f86ba300856ccd1707768378e9ae6caf89
           )
           .join("\n"),
       }}
@@ -174,7 +190,11 @@ function ChartTooltipContent({
     <div
       className={cn(
         "border-border/50 bg-background grid min-w-[8rem] items-start gap-1.5 rounded-lg border px-2.5 py-1.5 text-xs shadow-xl",
+<<<<<<< HEAD
         className
+=======
+        className,
+>>>>>>> d9b527f86ba300856ccd1707768378e9ae6caf89
       )}
     >
       {!nestLabel ? tooltipLabel : null}
@@ -189,7 +209,11 @@ function ChartTooltipContent({
               key={item.dataKey}
               className={cn(
                 "[&>svg]:text-muted-foreground flex w-full flex-wrap items-stretch gap-2 [&>svg]:h-2.5 [&>svg]:w-2.5",
+<<<<<<< HEAD
                 indicator === "dot" && "items-center"
+=======
+                indicator === "dot" && "items-center",
+>>>>>>> d9b527f86ba300856ccd1707768378e9ae6caf89
               )}
             >
               {formatter && item?.value !== undefined && item.name ? (
@@ -209,7 +233,11 @@ function ChartTooltipContent({
                             "w-0 border-[1.5px] border-dashed bg-transparent":
                               indicator === "dashed",
                             "my-0.5": nestLabel && indicator === "dashed",
+<<<<<<< HEAD
                           }
+=======
+                          },
+>>>>>>> d9b527f86ba300856ccd1707768378e9ae6caf89
                         )}
                         style={
                           {
@@ -223,7 +251,11 @@ function ChartTooltipContent({
                   <div
                     className={cn(
                       "flex flex-1 justify-between leading-none",
+<<<<<<< HEAD
                       nestLabel ? "items-end" : "items-center"
+=======
+                      nestLabel ? "items-end" : "items-center",
+>>>>>>> d9b527f86ba300856ccd1707768378e9ae6caf89
                     )}
                   >
                     <div className="grid gap-1.5">
@@ -272,7 +304,11 @@ function ChartLegendContent({
       className={cn(
         "flex items-center justify-center gap-4",
         verticalAlign === "top" ? "pb-3" : "pt-3",
+<<<<<<< HEAD
         className
+=======
+        className,
+>>>>>>> d9b527f86ba300856ccd1707768378e9ae6caf89
       )}
     >
       {payload.map((item) => {
@@ -283,7 +319,11 @@ function ChartLegendContent({
           <div
             key={item.value}
             className={cn(
+<<<<<<< HEAD
               "[&>svg]:text-muted-foreground flex items-center gap-1.5 [&>svg]:h-3 [&>svg]:w-3"
+=======
+              "[&>svg]:text-muted-foreground flex items-center gap-1.5 [&>svg]:h-3 [&>svg]:w-3",
+>>>>>>> d9b527f86ba300856ccd1707768378e9ae6caf89
             )}
           >
             {itemConfig?.icon && !hideIcon ? (
@@ -308,7 +348,11 @@ function ChartLegendContent({
 function getPayloadConfigFromPayload(
   config: ChartConfig,
   payload: unknown,
+<<<<<<< HEAD
   key: string
+=======
+  key: string,
+>>>>>>> d9b527f86ba300856ccd1707768378e9ae6caf89
 ) {
   if (typeof payload !== "object" || payload === null) {
     return undefined;

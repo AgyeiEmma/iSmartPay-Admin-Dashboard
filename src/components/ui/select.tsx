@@ -1,12 +1,20 @@
 "use client";
 
 import * as React from "react";
+<<<<<<< HEAD
 import * as SelectPrimitive from "@radix-ui/react-select";
+=======
+import * as SelectPrimitive from "@radix-ui/react-select@2.1.6";
+>>>>>>> d9b527f86ba300856ccd1707768378e9ae6caf89
 import {
   CheckIcon,
   ChevronDownIcon,
   ChevronUpIcon,
+<<<<<<< HEAD
 } from "lucide-react";
+=======
+} from "lucide-react@0.487.0";
+>>>>>>> d9b527f86ba300856ccd1707768378e9ae6caf89
 
 import { cn } from "./utils";
 

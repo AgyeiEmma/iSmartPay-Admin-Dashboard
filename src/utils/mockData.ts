@@ -3,6 +3,7 @@
  */
 
 export const mockUsers = [
+<<<<<<< HEAD
   {
     id: 1,
     name: "Kwame Mensah",
@@ -317,6 +318,62 @@ export const mockRoles = [
     userCount: 15,
     permissions: ["users.view", "transactions.view", "disputes.manage"],
   },
+=======
+  { id: 1, name: 'Kwame Mensah', email: 'kwame.mensah@example.com', status: 'active', kycLevel: 'Tier 3', lastLogin: '2025-10-09T08:30:00', role: 'customer', balance: 15420.50 },
+  { id: 2, name: 'Ama Osei', email: 'ama.osei@example.com', status: 'active', kycLevel: 'Tier 2', lastLogin: '2025-10-08T14:22:00', role: 'customer', balance: 8950.00 },
+  { id: 3, name: 'Kofi Asante', email: 'kofi.asante@example.com', status: 'pending', kycLevel: 'Tier 1', lastLogin: '2025-10-07T11:15:00', role: 'customer', balance: 2300.75 },
+  { id: 4, name: 'Akua Boateng', email: 'akua.boateng@example.com', status: 'suspended', kycLevel: 'Tier 2', lastLogin: '2025-10-06T09:45:00', role: 'customer', balance: 0.00 },
+  { id: 5, name: 'Yaw Owusu', email: 'yaw.owusu@example.com', status: 'active', kycLevel: 'Tier 3', lastLogin: '2025-10-09T10:00:00', role: 'merchant', balance: 45780.25 },
+];
+
+export const mockKYCRequests = [
+  { id: 1, userId: 3, userName: 'Kofi Asante', documentType: 'Ghana Card', status: 'pending', submittedAt: '2025-10-08T09:30:00', currentTier: 'Tier 1', requestedTier: 'Tier 2' },
+  { id: 2, userId: 6, userName: 'Efua Darko', documentType: 'Passport', status: 'under_review', submittedAt: '2025-10-07T14:20:00', currentTier: 'Tier 2', requestedTier: 'Tier 3' },
+  { id: 3, userId: 7, userName: 'Kwabena Appiah', documentType: 'Drivers License', status: 'pending', submittedAt: '2025-10-09T07:15:00', currentTier: 'Tier 1', requestedTier: 'Tier 2' },
+];
+
+export const mockSettlements = [
+  { id: 'STL-2025-001', merchantName: 'Yaw Owusu Trading', amount: 45780.25, transactionCount: 234, status: 'pending', createdAt: '2025-10-09T06:00:00', type: 'daily' },
+  { id: 'STL-2025-002', merchantName: 'Accra Mart Ltd', amount: 128450.00, transactionCount: 567, status: 'pending', createdAt: '2025-10-09T06:00:00', type: 'daily' },
+  { id: 'STL-2025-003', merchantName: 'Kumasi Electronics', amount: 67320.50, transactionCount: 189, status: 'approved', createdAt: '2025-10-08T06:00:00', type: 'daily', approvedBy: 'John Doe', approvedAt: '2025-10-08T08:30:00' },
+];
+
+export const mockTransactions = [
+  { id: 'TXN-20251009-001', userId: 1, userName: 'Kwame Mensah', type: 'payment', amount: 350.00, status: 'completed', timestamp: '2025-10-09T10:15:00', channel: 'mobile_money', reference: 'MM-45678901' },
+  { id: 'TXN-20251009-002', userId: 2, userName: 'Ama Osei', type: 'withdrawal', amount: 1200.00, status: 'completed', timestamp: '2025-10-09T09:45:00', channel: 'bank_transfer', reference: 'BT-12345678' },
+  { id: 'TXN-20251009-003', userId: 5, userName: 'Yaw Owusu', type: 'collection', amount: 5600.00, status: 'pending', timestamp: '2025-10-09T08:30:00', channel: 'card', reference: 'CD-98765432' },
+  { id: 'TXN-20251009-004', userId: 1, userName: 'Kwame Mensah', type: 'payment', amount: 15000.00, status: 'flagged', timestamp: '2025-10-09T07:20:00', channel: 'mobile_money', reference: 'MM-11223344', riskScore: 85 },
+];
+
+export const mockReconciliationItems = [
+  { id: 1, bankReference: 'BANK-2025-1001', internalReference: 'TXN-20251008-045', amount: 2500.00, date: '2025-10-08', status: 'matched', matchedBy: 'system' },
+  { id: 2, bankReference: 'BANK-2025-1002', internalReference: null, amount: 1750.00, date: '2025-10-08', status: 'unmatched', matchedBy: null },
+  { id: 3, bankReference: 'BANK-2025-1003', internalReference: 'TXN-20251008-067', amount: 8900.50, date: '2025-10-08', status: 'partial', matchedBy: 'manual' },
+];
+
+export const mockAlerts = [
+  { id: 1, type: 'velocity', severity: 'high', userId: 1, userName: 'Kwame Mensah', description: 'Multiple high-value transactions in 1 hour', timestamp: '2025-10-09T10:00:00', status: 'open' },
+  { id: 2, type: 'suspicious_pattern', severity: 'medium', userId: 4, userName: 'Akua Boateng', description: 'Unusual transaction pattern detected', timestamp: '2025-10-09T08:15:00', status: 'investigating' },
+  { id: 3, type: 'threshold', severity: 'high', userId: 5, userName: 'Yaw Owusu', description: 'Daily limit exceeded', timestamp: '2025-10-09T07:30:00', status: 'resolved' },
+];
+
+export const mockDisputes = [
+  { id: 'DSP-001', transactionId: 'TXN-20251005-123', userId: 2, userName: 'Ama Osei', amount: 450.00, reason: 'Unauthorized transaction', status: 'open', createdAt: '2025-10-08T14:00:00' },
+  { id: 'DSP-002', transactionId: 'TXN-20251004-089', userId: 1, userName: 'Kwame Mensah', amount: 1200.00, reason: 'Service not received', status: 'under_review', createdAt: '2025-10-07T10:30:00' },
+];
+
+export const mockAuditLogs = [
+  { id: 1, action: 'KYC_APPROVED', performedBy: 'admin@ismartpay.com', targetUser: 'Kofi Asante', timestamp: '2025-10-09T09:00:00', ipAddress: '192.168.1.100', details: 'Approved Tier 2 upgrade' },
+  { id: 2, action: 'SETTLEMENT_APPROVED', performedBy: 'treasury@ismartpay.com', targetUser: 'Kumasi Electronics', timestamp: '2025-10-08T08:30:00', ipAddress: '192.168.1.101', details: 'Approved settlement STL-2025-003' },
+  { id: 3, action: 'USER_SUSPENDED', performedBy: 'compliance@ismartpay.com', targetUser: 'Akua Boateng', timestamp: '2025-10-08T15:45:00', ipAddress: '192.168.1.102', details: 'Suspended due to suspicious activity' },
+];
+
+export const mockRoles = [
+  { id: 1, name: 'Super Admin', description: 'Full system access', userCount: 2, permissions: ['all'] },
+  { id: 2, name: 'Treasury Officer', description: 'Settlement and reconciliation access', userCount: 5, permissions: ['settlements.view', 'settlements.approve', 'reconciliation.manage'] },
+  { id: 3, name: 'Compliance Officer', description: 'KYC and AML monitoring', userCount: 8, permissions: ['kyc.view', 'kyc.approve', 'aml.view', 'users.suspend'] },
+  { id: 4, name: 'Support Agent', description: 'User support and basic operations', userCount: 15, permissions: ['users.view', 'transactions.view', 'disputes.manage'] },
+>>>>>>> d9b527f86ba300856ccd1707768378e9ae6caf89
 ];
 
 export const mockSystemHealth = {
@@ -325,11 +382,16 @@ export const mockSystemHealth = {
   activeConnections: 1247,
   queueLength: 23,
   errorRate: 0.12,
+<<<<<<< HEAD
   lastBackup: "2025-10-09T03:00:00",
+=======
+  lastBackup: '2025-10-09T03:00:00',
+>>>>>>> d9b527f86ba300856ccd1707768378e9ae6caf89
   dbReplicationLag: 0.5,
 };
 
 export const mockIntegrations = [
+<<<<<<< HEAD
   {
     id: 1,
     name: "MTN Mobile Money",
@@ -362,4 +424,10 @@ export const mockIntegrations = [
     uptime: 98.2,
     lastHeartbeat: "2025-10-09T10:20:00",
   },
+=======
+  { id: 1, name: 'MTN Mobile Money', type: 'payment_gateway', status: 'active', uptime: 99.8, lastHeartbeat: '2025-10-09T10:30:00' },
+  { id: 2, name: 'Vodafone Cash', type: 'payment_gateway', status: 'active', uptime: 99.5, lastHeartbeat: '2025-10-09T10:30:00' },
+  { id: 3, name: 'GCB Bank SFTP', type: 'bank_integration', status: 'active', uptime: 99.9, lastHeartbeat: '2025-10-09T10:25:00' },
+  { id: 4, name: 'Interswitch', type: 'card_processor', status: 'degraded', uptime: 98.2, lastHeartbeat: '2025-10-09T10:20:00' },
+>>>>>>> d9b527f86ba300856ccd1707768378e9ae6caf89
 ];

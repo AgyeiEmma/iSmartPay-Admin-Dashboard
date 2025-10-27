@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { useState, useEffect } from "react";
 import { createRole, getAllRoles, setAdminRole } from "../services/roleService";
 import {
@@ -45,12 +46,35 @@ import {
   Users,
   Shield,
   Clock,
+=======
+import { useState } from 'react';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
+import { Badge } from './ui/badge';
+import { Button } from './ui/button';
+import { Input } from './ui/input';
+import { Label } from './ui/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
+import { Switch } from './ui/switch';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from './ui/dialog';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from './ui/table';
+import { Checkbox } from './ui/checkbox';
+import { 
+  Search, 
+  Plus, 
+  Edit, 
+  Trash2, 
+  Users, 
+  Shield, 
+  Clock, 
+>>>>>>> d9b527f86ba300856ccd1707768378e9ae6caf89
   Key,
   UserCog,
   CheckCircle,
   XCircle,
   Eye,
   AlertTriangle,
+<<<<<<< HEAD
   Copy,
 } from "lucide-react";
 
@@ -126,10 +150,73 @@ export function RoleManagement() {
     };
     fetchRoles();
   }, []);
+=======
+  Copy
+} from 'lucide-react';
+
+export function RoleManagement() {
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedRole, setSelectedRole] = useState(null);
+
+  // Mock roles data
+  const roles = [
+    {
+      id: 'role-001',
+      name: 'Super Admin',
+      description: 'Full system access with all permissions',
+      userCount: 3,
+      permissions: ['user_management', 'system_config', 'financial_ops', 'audit_access', 'role_management'],
+      status: 'active',
+      createdAt: '2024-01-01T00:00:00Z',
+      lastModified: '2024-01-15T10:30:00Z'
+    },
+    {
+      id: 'role-002',
+      name: 'Compliance Officer',
+      description: 'KYC verification and regulatory compliance',
+      userCount: 8,
+      permissions: ['kyc_review', 'audit_access', 'user_view', 'transaction_monitoring'],
+      status: 'active',
+      createdAt: '2024-01-01T00:00:00Z',
+      lastModified: '2024-01-12T14:20:00Z'
+    },
+    {
+      id: 'role-003',
+      name: 'Treasury Manager',
+      description: 'Settlement approval and financial operations',
+      userCount: 5,
+      permissions: ['settlement_approval', 'reconciliation', 'financial_reports', 'user_view'],
+      status: 'active',
+      createdAt: '2024-01-01T00:00:00Z',
+      lastModified: '2024-01-10T09:45:00Z'
+    },
+    {
+      id: 'role-004',
+      name: 'Support Agent',
+      description: 'Customer support and basic user assistance',
+      userCount: 15,
+      permissions: ['user_view', 'transaction_view', 'support_tickets'],
+      status: 'active',
+      createdAt: '2024-01-01T00:00:00Z',
+      lastModified: '2024-01-08T16:15:00Z'
+    },
+    {
+      id: 'role-005',
+      name: 'Risk Analyst',
+      description: 'Transaction monitoring and fraud detection',
+      userCount: 4,
+      permissions: ['transaction_monitoring', 'fraud_investigation', 'risk_reports', 'user_view'],
+      status: 'active',
+      createdAt: '2024-01-01T00:00:00Z',
+      lastModified: '2024-01-14T11:30:00Z'
+    }
+  ];
+>>>>>>> d9b527f86ba300856ccd1707768378e9ae6caf89
 
   // Mock users data
   const users = [
     {
+<<<<<<< HEAD
       id: "user-001",
       name: "John Doe",
       email: "john.doe@ismartpay.com",
@@ -159,10 +246,42 @@ export function RoleManagement() {
       sessionCount: 0,
       twoFactorEnabled: false,
     },
+=======
+      id: 'user-001',
+      name: 'John Doe',
+      email: 'john.doe@ismartpay.com',
+      role: 'Super Admin',
+      status: 'active',
+      lastLogin: '2024-01-15T08:30:00Z',
+      sessionCount: 3,
+      twoFactorEnabled: true
+    },
+    {
+      id: 'user-002',
+      name: 'Jane Smith',
+      email: 'jane.smith@ismartpay.com',
+      role: 'Treasury Manager',
+      status: 'active',
+      lastLogin: '2024-01-15T09:15:00Z',
+      sessionCount: 1,
+      twoFactorEnabled: true
+    },
+    {
+      id: 'user-003',
+      name: 'Mike Johnson',
+      email: 'mike.johnson@ismartpay.com',
+      role: 'Compliance Officer',
+      status: 'inactive',
+      lastLogin: '2024-01-12T14:45:00Z',
+      sessionCount: 0,
+      twoFactorEnabled: false
+    }
+>>>>>>> d9b527f86ba300856ccd1707768378e9ae6caf89
   ];
 
   // All available permissions
   const allPermissions = [
+<<<<<<< HEAD
     { id: "user_management", name: "User Management", category: "Admin" },
     { id: "role_management", name: "Role Management", category: "Admin" },
     { id: "system_config", name: "System Configuration", category: "Admin" },
@@ -238,28 +357,66 @@ export function RoleManagement() {
     }
   };
 
+=======
+    { id: 'user_management', name: 'User Management', category: 'Admin' },
+    { id: 'role_management', name: 'Role Management', category: 'Admin' },
+    { id: 'system_config', name: 'System Configuration', category: 'Admin' },
+    { id: 'audit_access', name: 'Audit Access', category: 'Admin' },
+    { id: 'kyc_review', name: 'KYC Review', category: 'Compliance' },
+    { id: 'transaction_monitoring', name: 'Transaction Monitoring', category: 'Compliance' },
+    { id: 'fraud_investigation', name: 'Fraud Investigation', category: 'Compliance' },
+    { id: 'settlement_approval', name: 'Settlement Approval', category: 'Treasury' },
+    { id: 'reconciliation', name: 'Manual Reconciliation', category: 'Treasury' },
+    { id: 'financial_reports', name: 'Financial Reports', category: 'Treasury' },
+    { id: 'user_view', name: 'View Users', category: 'General' },
+    { id: 'transaction_view', name: 'View Transactions', category: 'General' },
+    { id: 'support_tickets', name: 'Support Tickets', category: 'General' },
+    { id: 'risk_reports', name: 'Risk Reports', category: 'Risk' }
+  ];
+
+  const getStatusBadge = (status: string) => {
+    return status === 'active' 
+      ? <Badge variant="default" className="bg-green-500"><CheckCircle className="w-3 h-3 mr-1" />Active</Badge>
+      : <Badge variant="secondary"><XCircle className="w-3 h-3 mr-1" />Inactive</Badge>;
+  };
+
+  const filteredRoles = roles.filter(role => 
+    role.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    role.description.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+>>>>>>> d9b527f86ba300856ccd1707768378e9ae6caf89
   return (
     <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-2xl font-bold text-gray-900">Role Management</h2>
+<<<<<<< HEAD
           <p className="text-gray-600">
             Manage user roles and permissions with segregation of duties
           </p>
+=======
+          <p className="text-gray-600">Manage user roles and permissions with segregation of duties</p>
+>>>>>>> d9b527f86ba300856ccd1707768378e9ae6caf89
         </div>
         <div className="flex items-center space-x-3">
           <Button variant="outline">
             <Copy className="w-4 h-4 mr-2" />
             Clone Role
           </Button>
+<<<<<<< HEAD
           <Button onClick={() => setShowCreateRole(true)}>
+=======
+          <Button>
+>>>>>>> d9b527f86ba300856ccd1707768378e9ae6caf89
             <Plus className="w-4 h-4 mr-2" />
             Create Role
           </Button>
         </div>
       </div>
 
+<<<<<<< HEAD
       {/* Create Role Dialog */}
       {showCreateRole && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-30">
@@ -302,6 +459,8 @@ export function RoleManagement() {
         </div>
       )}
 
+=======
+>>>>>>> d9b527f86ba300856ccd1707768378e9ae6caf89
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
         <Card>
@@ -309,9 +468,13 @@ export function RoleManagement() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-gray-600">Total Roles</p>
+<<<<<<< HEAD
                 <p className="text-2xl font-bold text-blue-600">
                   {roles.length}
                 </p>
+=======
+                <p className="text-2xl font-bold text-blue-600">{roles.length}</p>
+>>>>>>> d9b527f86ba300856ccd1707768378e9ae6caf89
               </div>
               <Shield className="w-8 h-8 text-blue-600" />
             </div>
@@ -321,11 +484,17 @@ export function RoleManagement() {
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
+<<<<<<< HEAD
                 <p className="text-sm font-medium text-gray-600">
                   Active Users
                 </p>
                 <p className="text-2xl font-bold text-green-600">
                   {users.filter((u) => u.status === "active").length}
+=======
+                <p className="text-sm font-medium text-gray-600">Active Users</p>
+                <p className="text-2xl font-bold text-green-600">
+                  {users.filter(u => u.status === 'active').length}
+>>>>>>> d9b527f86ba300856ccd1707768378e9ae6caf89
                 </p>
               </div>
               <Users className="w-8 h-8 text-green-600" />
@@ -338,7 +507,11 @@ export function RoleManagement() {
               <div>
                 <p className="text-sm font-medium text-gray-600">2FA Enabled</p>
                 <p className="text-2xl font-bold text-orange-600">
+<<<<<<< HEAD
                   {users.filter((u) => u.twoFactorEnabled).length}
+=======
+                  {users.filter(u => u.twoFactorEnabled).length}
+>>>>>>> d9b527f86ba300856ccd1707768378e9ae6caf89
                 </p>
               </div>
               <Key className="w-8 h-8 text-orange-600" />
@@ -349,9 +522,13 @@ export function RoleManagement() {
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
+<<<<<<< HEAD
                 <p className="text-sm font-medium text-gray-600">
                   Active Sessions
                 </p>
+=======
+                <p className="text-sm font-medium text-gray-600">Active Sessions</p>
+>>>>>>> d9b527f86ba300856ccd1707768378e9ae6caf89
                 <p className="text-2xl font-bold text-purple-600">
                   {users.reduce((sum, u) => sum + u.sessionCount, 0)}
                 </p>
@@ -374,9 +551,13 @@ export function RoleManagement() {
           <Card>
             <CardHeader>
               <CardTitle>System Roles</CardTitle>
+<<<<<<< HEAD
               <CardDescription>
                 Manage roles and their associated permissions
               </CardDescription>
+=======
+              <CardDescription>Manage roles and their associated permissions</CardDescription>
+>>>>>>> d9b527f86ba300856ccd1707768378e9ae6caf89
             </CardHeader>
             <CardContent>
               {/* Search */}
@@ -413,24 +594,34 @@ export function RoleManagement() {
                         <TableCell>
                           <div>
                             <p className="font-medium">{role.name}</p>
+<<<<<<< HEAD
                             <p className="text-sm text-gray-500">
                               {role.description}
                             </p>
                             <code className="text-xs bg-gray-100 px-1 py-0.5 rounded">
                               {role.id}
                             </code>
+=======
+                            <p className="text-sm text-gray-500">{role.description}</p>
+                            <code className="text-xs bg-gray-100 px-1 py-0.5 rounded">{role.id}</code>
+>>>>>>> d9b527f86ba300856ccd1707768378e9ae6caf89
                           </div>
                         </TableCell>
                         <TableCell>
                           <div className="flex items-center space-x-2">
                             <Users className="w-4 h-4 text-gray-400" />
+<<<<<<< HEAD
                             <span className="font-medium">
                               {role.userCount}
                             </span>
+=======
+                            <span className="font-medium">{role.userCount}</span>
+>>>>>>> d9b527f86ba300856ccd1707768378e9ae6caf89
                           </div>
                         </TableCell>
                         <TableCell>
                           <div className="flex flex-wrap gap-1">
+<<<<<<< HEAD
                             {role.permissions
                               .slice(0, 2)
                               .map((perm: string) => (
@@ -442,6 +633,13 @@ export function RoleManagement() {
                                   {perm.replace("_", " ")}
                                 </Badge>
                               ))}
+=======
+                            {role.permissions.slice(0, 2).map((perm) => (
+                              <Badge key={perm} variant="outline" className="text-xs">
+                                {perm.replace('_', ' ')}
+                              </Badge>
+                            ))}
+>>>>>>> d9b527f86ba300856ccd1707768378e9ae6caf89
                             {role.permissions.length > 2 && (
                               <Badge variant="secondary" className="text-xs">
                                 +{role.permissions.length - 2} more
@@ -465,27 +663,39 @@ export function RoleManagement() {
                               </DialogTrigger>
                               <DialogContent className="max-w-2xl">
                                 <DialogHeader>
+<<<<<<< HEAD
                                   <DialogTitle>
                                     Role Details - {role.name}
                                   </DialogTitle>
+=======
+                                  <DialogTitle>Role Details - {role.name}</DialogTitle>
+>>>>>>> d9b527f86ba300856ccd1707768378e9ae6caf89
                                   <DialogDescription>
                                     View and manage role permissions
                                   </DialogDescription>
                                 </DialogHeader>
+<<<<<<< HEAD
                                 <RoleDetailsModal
                                   role={role}
                                   permissions={allPermissions}
                                 />
+=======
+                                <RoleDetailsModal role={role} permissions={allPermissions} />
+>>>>>>> d9b527f86ba300856ccd1707768378e9ae6caf89
                               </DialogContent>
                             </Dialog>
                             <Button variant="outline" size="sm">
                               <Edit className="w-4 h-4" />
                             </Button>
+<<<<<<< HEAD
                             <Button
                               variant="outline"
                               size="sm"
                               className="text-red-600 border-red-200"
                             >
+=======
+                            <Button variant="outline" size="sm" className="text-red-600 border-red-200">
+>>>>>>> d9b527f86ba300856ccd1707768378e9ae6caf89
                               <Trash2 className="w-4 h-4" />
                             </Button>
                           </div>
@@ -503,6 +713,7 @@ export function RoleManagement() {
           <Card>
             <CardHeader>
               <CardTitle>Permission Matrix</CardTitle>
+<<<<<<< HEAD
               <CardDescription>
                 View and manage granular permissions across roles
               </CardDescription>
@@ -559,12 +770,57 @@ export function RoleManagement() {
                     </div>
                   )
                 )}
+=======
+              <CardDescription>View and manage granular permissions across roles</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-6">
+                {['Admin', 'Compliance', 'Treasury', 'Risk', 'General'].map((category) => (
+                  <div key={category}>
+                    <h4 className="font-medium mb-3 text-gray-900">{category} Permissions</h4>
+                    <div className="border rounded-lg overflow-hidden">
+                      <Table>
+                        <TableHeader>
+                          <TableRow>
+                            <TableHead>Permission</TableHead>
+                            {roles.map((role) => (
+                              <TableHead key={role.id} className="text-center">
+                                {role.name}
+                              </TableHead>
+                            ))}
+                          </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                          {allPermissions
+                            .filter((perm) => perm.category === category)
+                            .map((permission) => (
+                              <TableRow key={permission.id}>
+                                <TableCell className="font-medium">
+                                  {permission.name}
+                                </TableCell>
+                                {roles.map((role) => (
+                                  <TableCell key={role.id} className="text-center">
+                                    <Checkbox
+                                      checked={role.permissions.includes(permission.id)}
+                                      disabled
+                                    />
+                                  </TableCell>
+                                ))}
+                              </TableRow>
+                            ))}
+                        </TableBody>
+                      </Table>
+                    </div>
+                  </div>
+                ))}
+>>>>>>> d9b527f86ba300856ccd1707768378e9ae6caf89
               </div>
             </CardContent>
           </Card>
         </TabsContent>
 
         <TabsContent value="users" className="space-y-6">
+<<<<<<< HEAD
           {/* Set Role Dialog */}
           {setRoleUser && (
             <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
@@ -621,6 +877,12 @@ export function RoleManagement() {
               <CardDescription>
                 Manage user accounts, sessions, and access controls
               </CardDescription>
+=======
+          <Card>
+            <CardHeader>
+              <CardTitle>User Access Management</CardTitle>
+              <CardDescription>Manage user accounts, sessions, and access controls</CardDescription>
+>>>>>>> d9b527f86ba300856ccd1707768378e9ae6caf89
             </CardHeader>
             <CardContent>
               <div className="border rounded-lg">
@@ -641,9 +903,13 @@ export function RoleManagement() {
                         <TableCell>
                           <div>
                             <p className="font-medium">{user.name}</p>
+<<<<<<< HEAD
                             <p className="text-sm text-gray-500">
                               {user.email}
                             </p>
+=======
+                            <p className="text-sm text-gray-500">{user.email}</p>
+>>>>>>> d9b527f86ba300856ccd1707768378e9ae6caf89
                           </div>
                         </TableCell>
                         <TableCell>
@@ -677,6 +943,7 @@ export function RoleManagement() {
                         </TableCell>
                         <TableCell>
                           <div className="flex items-center space-x-2">
+<<<<<<< HEAD
                             <Button
                               variant="outline"
                               size="sm"
@@ -684,15 +951,23 @@ export function RoleManagement() {
                             >
                               <UserCog className="w-4 h-4" />
                               Set Role
+=======
+                            <Button variant="outline" size="sm">
+                              <UserCog className="w-4 h-4" />
+>>>>>>> d9b527f86ba300856ccd1707768378e9ae6caf89
                             </Button>
                             <Button variant="outline" size="sm">
                               Reset 2FA
                             </Button>
+<<<<<<< HEAD
                             <Button
                               variant="outline"
                               size="sm"
                               className="text-red-600 border-red-200"
                             >
+=======
+                            <Button variant="outline" size="sm" className="text-red-600 border-red-200">
+>>>>>>> d9b527f86ba300856ccd1707768378e9ae6caf89
                               Deactivate
                             </Button>
                           </div>
@@ -710,9 +985,13 @@ export function RoleManagement() {
           <Card>
             <CardHeader>
               <CardTitle>Security Policies</CardTitle>
+<<<<<<< HEAD
               <CardDescription>
                 Configure system-wide security and access policies
               </CardDescription>
+=======
+              <CardDescription>Configure system-wide security and access policies</CardDescription>
+>>>>>>> d9b527f86ba300856ccd1707768378e9ae6caf89
             </CardHeader>
             <CardContent>
               <div className="space-y-6">
@@ -734,7 +1013,11 @@ export function RoleManagement() {
                       </div>
                     </div>
                   </div>
+<<<<<<< HEAD
 
+=======
+                  
+>>>>>>> d9b527f86ba300856ccd1707768378e9ae6caf89
                   <div className="border rounded-lg p-4">
                     <h4 className="font-medium mb-4">Session Management</h4>
                     <div className="space-y-3">
@@ -760,9 +1043,13 @@ export function RoleManagement() {
                     <div className="flex items-center justify-between">
                       <div>
                         <Label>Settlement Approval Threshold</Label>
+<<<<<<< HEAD
                         <p className="text-sm text-gray-500">
                           Requires dual approval above this amount
                         </p>
+=======
+                        <p className="text-sm text-gray-500">Requires dual approval above this amount</p>
+>>>>>>> d9b527f86ba300856ccd1707768378e9ae6caf89
                       </div>
                       <div className="flex items-center space-x-2">
                         <span>₵</span>
@@ -772,18 +1059,26 @@ export function RoleManagement() {
                     <div className="flex items-center justify-between">
                       <div>
                         <Label>User Role Changes</Label>
+<<<<<<< HEAD
                         <p className="text-sm text-gray-500">
                           Require approval for role modifications
                         </p>
+=======
+                        <p className="text-sm text-gray-500">Require approval for role modifications</p>
+>>>>>>> d9b527f86ba300856ccd1707768378e9ae6caf89
                       </div>
                       <Switch checked />
                     </div>
                     <div className="flex items-center justify-between">
                       <div>
                         <Label>KYC Rejection Override</Label>
+<<<<<<< HEAD
                         <p className="text-sm text-gray-500">
                           Require senior approval to override KYC decisions
                         </p>
+=======
+                        <p className="text-sm text-gray-500">Require senior approval to override KYC decisions</p>
+>>>>>>> d9b527f86ba300856ccd1707768378e9ae6caf89
                       </div>
                       <Switch checked />
                     </div>
@@ -803,6 +1098,7 @@ export function RoleManagement() {
   );
 }
 
+<<<<<<< HEAD
 function RoleDetailsModal({
   role,
   permissions,
@@ -810,6 +1106,9 @@ function RoleDetailsModal({
   role: any;
   permissions: any[];
 }) {
+=======
+function RoleDetailsModal({ role, permissions }: { role: any; permissions: any[] }) {
+>>>>>>> d9b527f86ba300856ccd1707768378e9ae6caf89
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-2 gap-6">
@@ -830,9 +1129,13 @@ function RoleDetailsModal({
             </div>
             <div className="flex justify-between">
               <span className="text-gray-600">Created:</span>
+<<<<<<< HEAD
               <span className="font-medium">
                 {new Date(role.createdAt).toLocaleDateString()}
               </span>
+=======
+              <span className="font-medium">{new Date(role.createdAt).toLocaleDateString()}</span>
+>>>>>>> d9b527f86ba300856ccd1707768378e9ae6caf89
             </div>
           </div>
         </div>
@@ -840,6 +1143,7 @@ function RoleDetailsModal({
         <div>
           <h4 className="font-medium mb-3">Permission Summary</h4>
           <div className="space-y-2">
+<<<<<<< HEAD
             {["Admin", "Compliance", "Treasury", "Risk", "General"].map(
               (category) => {
                 const categoryPerms = permissions.filter(
@@ -858,6 +1162,20 @@ function RoleDetailsModal({
                 );
               }
             )}
+=======
+            {['Admin', 'Compliance', 'Treasury', 'Risk', 'General'].map((category) => {
+              const categoryPerms = permissions.filter(p => p.category === category);
+              const assignedPerms = categoryPerms.filter(p => role.permissions.includes(p.id));
+              return (
+                <div key={category} className="flex justify-between text-sm">
+                  <span className="text-gray-600">{category}:</span>
+                  <span className="font-medium">
+                    {assignedPerms.length}/{categoryPerms.length}
+                  </span>
+                </div>
+              );
+            })}
+>>>>>>> d9b527f86ba300856ccd1707768378e9ae6caf89
           </div>
         </div>
       </div>
@@ -881,4 +1199,8 @@ function RoleDetailsModal({
       </div>
     </div>
   );
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> d9b527f86ba300856ccd1707768378e9ae6caf89

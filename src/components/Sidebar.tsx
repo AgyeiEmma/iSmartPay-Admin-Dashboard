@@ -6,26 +6,37 @@ import {
   Calculator,
   Activity,
   UserCog,
+<<<<<<< HEAD
   FileText,
   DollarSign,
   X,
   LogOut,
   UserCheck,
+=======
+  X,
+>>>>>>> d9b527f86ba300856ccd1707768378e9ae6caf89
 } from "lucide-react";
 import logo from "../assets/6a9a1923a3866d6050391544b559c9d12ee5b150.png";
 
 const menuItems = [
   { id: "dashboard", label: "Dashboard", icon: BarChart3 },
   { id: "users", label: "User Management", icon: Users },
+<<<<<<< HEAD
   { id: "admins", label: "Admin Management", icon: UserCheck },
+=======
+>>>>>>> d9b527f86ba300856ccd1707768378e9ae6caf89
   { id: "kyc", label: "KYC Verification", icon: Shield },
   { id: "settlements", label: "Settlements", icon: CreditCard },
   { id: "reconciliation", label: "Reconciliation", icon: Calculator },
   { id: "transactions", label: "Transactions", icon: Activity },
+<<<<<<< HEAD
   { id: "fees", label: "Fee Management", icon: DollarSign },
   { id: "reports", label: "Reports", icon: FileText },
   { id: "roles", label: "Role Management", icon: UserCog },
   { id: "register", label: "Create New Admin", icon: Shield },
+=======
+  { id: "roles", label: "Role Management", icon: UserCog },
+>>>>>>> d9b527f86ba300856ccd1707768378e9ae6caf89
 ];
 
 interface SidebarProps {
@@ -33,7 +44,10 @@ interface SidebarProps {
   setActiveTab: (tab: string) => void;
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
+<<<<<<< HEAD
   onLogout: () => void;
+=======
+>>>>>>> d9b527f86ba300856ccd1707768378e9ae6caf89
 }
 
 export function Sidebar({
@@ -41,7 +55,10 @@ export function Sidebar({
   setActiveTab,
   isOpen,
   setIsOpen,
+<<<<<<< HEAD
   onLogout,
+=======
+>>>>>>> d9b527f86ba300856ccd1707768378e9ae6caf89
 }: SidebarProps) {
   const handleTabChange = (tab: string) => {
     setActiveTab(tab);
@@ -76,7 +93,10 @@ export function Sidebar({
           w-64 bg-white shadow-lg border-r border-gray-200
           overflow-y-auto z-50
           transition-transform duration-300 ease-in-out
+<<<<<<< HEAD
           flex flex-col
+=======
+>>>>>>> d9b527f86ba300856ccd1707768378e9ae6caf89
           ${isOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}
         `}
       >
@@ -106,7 +126,11 @@ export function Sidebar({
         </div>
 
         {/* Navigation */}
+<<<<<<< HEAD
         <nav className="py-4 flex-1">
+=======
+        <nav className="py-4">
+>>>>>>> d9b527f86ba300856ccd1707768378e9ae6caf89
           <ul className="space-y-1 px-4">
             {menuItems.map((item) => {
               const Icon = item.icon;
@@ -128,6 +152,7 @@ export function Sidebar({
             })}
           </ul>
         </nav>
+<<<<<<< HEAD
 
         {/* Logout Button */}
         <div className="p-4 border-t border-gray-200">
@@ -139,6 +164,8 @@ export function Sidebar({
             <span className="truncate">Logout</span>
           </button>
         </div>
+=======
+>>>>>>> d9b527f86ba300856ccd1707768378e9ae6caf89
       </aside>
     </>
   );

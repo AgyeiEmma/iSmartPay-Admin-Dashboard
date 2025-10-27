@@ -1,6 +1,11 @@
 import * as React from "react";
+<<<<<<< HEAD
 import { Slot } from "@radix-ui/react-slot";
 import { ChevronRight, MoreHorizontal } from "lucide-react";
+=======
+import { Slot } from "@radix-ui/react-slot@1.1.2";
+import { ChevronRight, MoreHorizontal } from "lucide-react@0.487.0";
+>>>>>>> d9b527f86ba300856ccd1707768378e9ae6caf89
 
 import { cn } from "./utils";
 

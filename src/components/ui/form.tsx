@@ -1,8 +1,13 @@
 "use client";
 
 import * as React from "react";
+<<<<<<< HEAD
 import * as LabelPrimitive from "@radix-ui/react-label";
 import { Slot } from "@radix-ui/react-slot";
+=======
+import * as LabelPrimitive from "@radix-ui/react-label@2.1.2";
+import { Slot } from "@radix-ui/react-slot@1.1.2";
+>>>>>>> d9b527f86ba300856ccd1707768378e9ae6caf89
 import {
   Controller,
   FormProvider,
@@ -11,7 +16,11 @@ import {
   type ControllerProps,
   type FieldPath,
   type FieldValues,
+<<<<<<< HEAD
 } from "react-hook-form";
+=======
+} from "react-hook-form@7.55.0";
+>>>>>>> d9b527f86ba300856ccd1707768378e9ae6caf89
 
 import { cn } from "./utils";
 import { Label } from "./label";
@@ -20,18 +29,30 @@ const Form = FormProvider;
 
 type FormFieldContextValue<
   TFieldValues extends FieldValues = FieldValues,
+<<<<<<< HEAD
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>
+=======
+  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
+>>>>>>> d9b527f86ba300856ccd1707768378e9ae6caf89
 > = {
   name: TName;
 };
 
 const FormFieldContext = React.createContext<FormFieldContextValue>(
+<<<<<<< HEAD
   {} as FormFieldContextValue
+=======
+  {} as FormFieldContextValue,
+>>>>>>> d9b527f86ba300856ccd1707768378e9ae6caf89
 );
 
 const FormField = <
   TFieldValues extends FieldValues = FieldValues,
+<<<<<<< HEAD
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>
+=======
+  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
+>>>>>>> d9b527f86ba300856ccd1707768378e9ae6caf89
 >({
   ...props
 }: ControllerProps<TFieldValues, TName>) => {
@@ -70,7 +91,11 @@ type FormItemContextValue = {
 };
 
 const FormItemContext = React.createContext<FormItemContextValue>(
+<<<<<<< HEAD
   {} as FormItemContextValue
+=======
+  {} as FormItemContextValue,
+>>>>>>> d9b527f86ba300856ccd1707768378e9ae6caf89
 );
 
 function FormItem({ className, ...props }: React.ComponentProps<"div">) {
