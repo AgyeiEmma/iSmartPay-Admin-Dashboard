@@ -16,13 +16,10 @@ export default defineConfig({
       "next-themes@0.4.6": "next-themes",
       "lucide-react@0.487.0": "lucide-react",
       "input-otp@1.4.2": "input-otp",
-<<<<<<< HEAD
       "figma:asset/6a9a1923a3866d6050391544b559c9d12ee5b150.png": path.resolve(
         __dirname,
         "./src/assets/6a9a1923a3866d6050391544b559c9d12ee5b150.png"
       ),
-=======
->>>>>>> d9b527f86ba300856ccd1707768378e9ae6caf89
       "embla-carousel-react@8.6.0": "embla-carousel-react",
       "cmdk@1.1.1": "cmdk",
       "class-variance-authority@0.7.1": "class-variance-authority",
@@ -58,16 +55,11 @@ export default defineConfig({
   },
   build: {
     target: "esnext",
-<<<<<<< HEAD
     outDir: "build",
-=======
-    outDir: "dist",
->>>>>>> d9b527f86ba300856ccd1707768378e9ae6caf89
   },
   server: {
     port: 3000,
     open: true,
-<<<<<<< HEAD
     proxy: {
       "/api": {
         target: "http://18.116.165.182:5600/auth-service/api",
@@ -75,7 +67,5 @@ export default defineConfig({
         secure: false,
       },
     },
-=======
->>>>>>> d9b527f86ba300856ccd1707768378e9ae6caf89
   },
 });

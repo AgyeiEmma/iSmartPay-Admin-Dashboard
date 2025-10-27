@@ -1,3 +1,4 @@
+import React from "react";
 import {
   BarChart3,
   Users,
@@ -6,37 +7,26 @@ import {
   Calculator,
   Activity,
   UserCog,
-<<<<<<< HEAD
   FileText,
   DollarSign,
   X,
   LogOut,
   UserCheck,
-=======
-  X,
->>>>>>> d9b527f86ba300856ccd1707768378e9ae6caf89
 } from "lucide-react";
 import logo from "../assets/6a9a1923a3866d6050391544b559c9d12ee5b150.png";
 
 const menuItems = [
   { id: "dashboard", label: "Dashboard", icon: BarChart3 },
   { id: "users", label: "User Management", icon: Users },
-<<<<<<< HEAD
   { id: "admins", label: "Admin Management", icon: UserCheck },
-=======
->>>>>>> d9b527f86ba300856ccd1707768378e9ae6caf89
   { id: "kyc", label: "KYC Verification", icon: Shield },
   { id: "settlements", label: "Settlements", icon: CreditCard },
   { id: "reconciliation", label: "Reconciliation", icon: Calculator },
   { id: "transactions", label: "Transactions", icon: Activity },
-<<<<<<< HEAD
   { id: "fees", label: "Fee Management", icon: DollarSign },
   { id: "reports", label: "Reports", icon: FileText },
   { id: "roles", label: "Role Management", icon: UserCog },
   { id: "register", label: "Create New Admin", icon: Shield },
-=======
-  { id: "roles", label: "Role Management", icon: UserCog },
->>>>>>> d9b527f86ba300856ccd1707768378e9ae6caf89
 ];
 
 interface SidebarProps {
@@ -44,10 +34,7 @@ interface SidebarProps {
   setActiveTab: (tab: string) => void;
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
-<<<<<<< HEAD
-  onLogout: () => void;
-=======
->>>>>>> d9b527f86ba300856ccd1707768378e9ae6caf89
+  onLogout?: () => void;
 }
 
 export function Sidebar({
@@ -55,23 +42,19 @@ export function Sidebar({
   setActiveTab,
   isOpen,
   setIsOpen,
-<<<<<<< HEAD
   onLogout,
-=======
->>>>>>> d9b527f86ba300856ccd1707768378e9ae6caf89
 }: SidebarProps) {
   const handleTabChange = (tab: string) => {
     setActiveTab(tab);
     // Close sidebar on mobile after selecting an item
-    if (window.innerWidth < 1024) {
+    if (typeof window !== "undefined" && window.innerWidth < 1024) {
       setIsOpen(false);
     }
   };
 
   const handleLogoClick = () => {
     setActiveTab("dashboard");
-    // Toggle sidebar on mobile when clicking logo
-    if (window.innerWidth < 1024) {
+    if (typeof window !== "undefined" && window.innerWidth < 1024) {
       setIsOpen(!isOpen);
     }
   };
@@ -93,10 +76,7 @@ export function Sidebar({
           w-64 bg-white shadow-lg border-r border-gray-200
           overflow-y-auto z-50
           transition-transform duration-300 ease-in-out
-<<<<<<< HEAD
           flex flex-col
-=======
->>>>>>> d9b527f86ba300856ccd1707768378e9ae6caf89
           ${isOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}
         `}
       >
@@ -126,11 +106,7 @@ export function Sidebar({
         </div>
 
         {/* Navigation */}
-<<<<<<< HEAD
         <nav className="py-4 flex-1">
-=======
-        <nav className="py-4">
->>>>>>> d9b527f86ba300856ccd1707768378e9ae6caf89
           <ul className="space-y-1 px-4">
             {menuItems.map((item) => {
               const Icon = item.icon;
@@ -152,21 +128,22 @@ export function Sidebar({
             })}
           </ul>
         </nav>
-<<<<<<< HEAD
 
         {/* Logout Button */}
-        <div className="p-4 border-t border-gray-200">
-          <button
-            onClick={onLogout}
-            className="w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg transition-colors text-sm text-red-600 hover:bg-red-50 border border-red-200"
-          >
-            <LogOut className="w-4 h-4 flex-shrink-0" />
-            <span className="truncate">Logout</span>
-          </button>
-        </div>
-=======
->>>>>>> d9b527f86ba300856ccd1707768378e9ae6caf89
+        {onLogout && (
+          <div className="p-4 border-t border-gray-200">
+            <button
+              onClick={onLogout}
+              className="w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg transition-colors text-sm text-red-600 hover:bg-red-50 border border-red-200"
+            >
+              <LogOut className="w-4 h-4 flex-shrink-0" />
+              <span className="truncate">Logout</span>
+            </button>
+          </div>
+        )}
       </aside>
     </>
   );
 }
+
+export default Sidebar;
