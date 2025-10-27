@@ -23,7 +23,8 @@ import {
 } from "lucide-react";
 
 // API Base URL
-const API_BASE_URL = "http://18.116.165.182:5600/auth-service";
+const API_BASE_URL =
+  "http://18.116.165.182:5600/auth-service/api/reviews/kyc-documents";
 
 const mockKycApplications = [
   {
@@ -105,16 +106,26 @@ export function KYCVerification() {
   const [error, setError] = useState<string | null>(null);
 
   // Fetch KYC applications on component mount
+
   useEffect(() => {
     fetchKYCApplications();
   }, []);
+
+  // Helper to safely get nested values
+  const safe = (fn: () => any, fallback: any = "-") => {
+    try {
+      const v = fn();
+      return v === null || v === undefined ? fallback : v;
+    } catch {
+      return fallback;
+    }
+  };
 
   const fetchKYCApplications = async () => {
     setLoading(true);
     setError(null);
     try {
       const token = localStorage.getItem("authToken");
-
       if (!token) {
         throw new Error("No authentication token found. Please log in.");
       }
@@ -138,8 +149,7 @@ export function KYCVerification() {
       }
 
       const data = await response.json();
-
-      // Handle different response structures
+      // Expecting data.data as array of KYC applications
       let kycData: any[] = [];
       if (Array.isArray(data)) {
         kycData = data;
@@ -149,11 +159,61 @@ export function KYCVerification() {
         kycData = data.applications;
       }
 
-      setKycApplications(kycData);
+      // Map to flat structure for UI
+      const mapped = kycData.map((item) => {
+        // Sample API: { id, status, submittedAt, documentType, customer: { ... }, users: [ ... ] }
+        const customer = item.customer || {};
+        const user = (item.users && item.users[0]) || {};
+        // Documents may be nested or null
+        const docs = item.documents || {};
+        return {
+          id: item.id || safe(() => item._id),
+          userName: safe(
+            () => user.fullName,
+            safe(() => customer.fullName, "-")
+          ),
+          email: safe(
+            () => user.email,
+            safe(() => customer.email, "-")
+          ),
+          submittedDate: safe(() => item.submittedAt, "-"),
+          status: safe(() => item.status, "-"),
+          documentType: safe(() => item.documentType, "-"),
+          documents: {
+            idFront: safe(() => docs.idFrontUrl, null),
+            idBack: safe(() => docs.idBackUrl, null),
+            selfie: safe(() => docs.selfieUrl, null),
+            proofOfAddress: safe(() => docs.proofOfAddressUrl, null),
+          },
+          personalInfo: {
+            fullName: safe(
+              () => user.fullName,
+              safe(() => customer.fullName, "-")
+            ),
+            dateOfBirth: safe(
+              () => user.dateOfBirth,
+              safe(() => customer.dateOfBirth, "-")
+            ),
+            idNumber: safe(
+              () => user.idNumber,
+              safe(() => customer.idNumber, "-")
+            ),
+            address: safe(
+              () => user.address,
+              safe(() => customer.address, "-")
+            ),
+            occupation: safe(
+              () => user.occupation,
+              safe(() => customer.occupation, "-")
+            ),
+          },
+          reviewNotes: safe(() => item.reviewNotes, ""),
+        };
+      });
+      setKycApplications(mapped);
     } catch (err: any) {
       setError(err.message || "Failed to load KYC applications");
       console.error("Error fetching KYC applications:", err);
-      // Fallback to empty array on error
       setKycApplications([]);
     } finally {
       setLoading(false);
@@ -307,157 +367,197 @@ export function KYCVerification() {
                             KYC Review - {application.userName}
                           </DialogTitle>
                         </DialogHeader>
-                        {selectedApplication && (
-                          <div className="space-y-6">
-                            {/* Personal Information */}
-                            <div className="border rounded-lg p-4">
-                              <h3 className="font-semibold text-gray-900 mb-3 flex items-center">
-                                <User className="w-5 h-5 mr-2" />
-                                Personal Information
-                              </h3>
-                              <div className="grid grid-cols-2 gap-4">
-                                <div>
-                                  <label className="text-sm font-medium text-gray-600">
-                                    Full Name
-                                  </label>
-                                  <p className="text-sm text-gray-900">
-                                    {selectedApplication.personalInfo.fullName}
-                                  </p>
-                                </div>
-                                <div>
-                                  <label className="text-sm font-medium text-gray-600">
-                                    Date of Birth
-                                  </label>
-                                  <p className="text-sm text-gray-900">
-                                    {
-                                      selectedApplication.personalInfo
-                                        .dateOfBirth
-                                    }
-                                  </p>
-                                </div>
-                                <div>
-                                  <label className="text-sm font-medium text-gray-600">
-                                    ID Number
-                                  </label>
-                                  <p className="text-sm text-gray-900">
-                                    {selectedApplication.personalInfo.idNumber}
-                                  </p>
-                                </div>
-                                <div>
-                                  <label className="text-sm font-medium text-gray-600">
-                                    Occupation
-                                  </label>
-                                  <p className="text-sm text-gray-900">
-                                    {
-                                      selectedApplication.personalInfo
-                                        .occupation
-                                    }
-                                  </p>
-                                </div>
-                                <div className="col-span-2">
-                                  <label className="text-sm font-medium text-gray-600">
-                                    Address
-                                  </label>
-                                  <p className="text-sm text-gray-900">
-                                    {selectedApplication.personalInfo.address}
-                                  </p>
-                                </div>
-                              </div>
-                            </div>
-
-                            {/* Document Review */}
-                            <div className="border rounded-lg p-4">
-                              <h3 className="font-semibold text-gray-900 mb-3 flex items-center">
-                                <FileText className="w-5 h-5 mr-2" />
-                                Document Review
-                              </h3>
-                              <div className="grid grid-cols-2 gap-4">
-                                <div className="space-y-2">
-                                  <label className="text-sm font-medium text-gray-600">
-                                    ID Front
-                                  </label>
-                                  <img
-                                    src={selectedApplication.documents.idFront}
-                                    alt="ID Front"
-                                    className="w-full h-40 object-cover border rounded-lg"
-                                  />
-                                </div>
-                                <div className="space-y-2">
-                                  <label className="text-sm font-medium text-gray-600">
-                                    ID Back
-                                  </label>
-                                  <img
-                                    src={selectedApplication.documents.idBack}
-                                    alt="ID Back"
-                                    className="w-full h-40 object-cover border rounded-lg"
-                                  />
-                                </div>
-                                <div className="space-y-2">
-                                  <label className="text-sm font-medium text-gray-600">
-                                    Selfie
-                                  </label>
-                                  <img
-                                    src={selectedApplication.documents.selfie}
-                                    alt="Selfie"
-                                    className="w-full h-40 object-cover border rounded-lg"
-                                  />
-                                </div>
-                                <div className="space-y-2">
-                                  <label className="text-sm font-medium text-gray-600">
-                                    Proof of Address
-                                  </label>
-                                  <img
-                                    src={
-                                      selectedApplication.documents
-                                        .proofOfAddress
-                                    }
-                                    alt="Proof of Address"
-                                    className="w-full h-40 object-cover border rounded-lg"
-                                  />
+                        {selectedApplication &&
+                          selectedApplication.id === application.id && (
+                            <div className="space-y-6">
+                              {/* Personal Information */}
+                              <div className="border rounded-lg p-4">
+                                <h3 className="font-semibold text-gray-900 mb-3 flex items-center">
+                                  <User className="w-5 h-5 mr-2" />
+                                  Personal Information
+                                </h3>
+                                <div className="grid grid-cols-2 gap-4">
+                                  <div>
+                                    <label className="text-sm font-medium text-gray-600">
+                                      Full Name
+                                    </label>
+                                    <p className="text-sm text-gray-900">
+                                      {
+                                        selectedApplication.personalInfo
+                                          .fullName
+                                      }
+                                    </p>
+                                  </div>
+                                  <div>
+                                    <label className="text-sm font-medium text-gray-600">
+                                      Date of Birth
+                                    </label>
+                                    <p className="text-sm text-gray-900">
+                                      {
+                                        selectedApplication.personalInfo
+                                          .dateOfBirth
+                                      }
+                                    </p>
+                                  </div>
+                                  <div>
+                                    <label className="text-sm font-medium text-gray-600">
+                                      ID Number
+                                    </label>
+                                    <p className="text-sm text-gray-900">
+                                      {
+                                        selectedApplication.personalInfo
+                                          .idNumber
+                                      }
+                                    </p>
+                                  </div>
+                                  <div>
+                                    <label className="text-sm font-medium text-gray-600">
+                                      Occupation
+                                    </label>
+                                    <p className="text-sm text-gray-900">
+                                      {
+                                        selectedApplication.personalInfo
+                                          .occupation
+                                      }
+                                    </p>
+                                  </div>
+                                  <div className="col-span-2">
+                                    <label className="text-sm font-medium text-gray-600">
+                                      Address
+                                    </label>
+                                    <p className="text-sm text-gray-900">
+                                      {selectedApplication.personalInfo.address}
+                                    </p>
+                                  </div>
                                 </div>
                               </div>
-                            </div>
 
-                            {/* Review Notes */}
-                            <div className="space-y-2">
-                              <label className="text-sm font-medium text-gray-600">
-                                Review Notes
-                              </label>
-                              <Textarea
-                                value={reviewNotes}
-                                onChange={(e) => setReviewNotes(e.target.value)}
-                                placeholder="Add notes about the verification..."
-                                rows={3}
-                              />
-                            </div>
+                              {/* Document Review */}
+                              <div className="border rounded-lg p-4">
+                                <h3 className="font-semibold text-gray-900 mb-3 flex items-center">
+                                  <FileText className="w-5 h-5 mr-2" />
+                                  Document Review
+                                </h3>
+                                <div className="grid grid-cols-2 gap-4">
+                                  <div className="space-y-2">
+                                    <label className="text-sm font-medium text-gray-600">
+                                      ID Front
+                                    </label>
+                                    {selectedApplication.documents.idFront ? (
+                                      <img
+                                        src={
+                                          selectedApplication.documents.idFront
+                                        }
+                                        alt="ID Front"
+                                        className="w-full h-40 object-cover border rounded-lg"
+                                      />
+                                    ) : (
+                                      <span className="text-gray-400">
+                                        Not Provided
+                                      </span>
+                                    )}
+                                  </div>
+                                  <div className="space-y-2">
+                                    <label className="text-sm font-medium text-gray-600">
+                                      ID Back
+                                    </label>
+                                    {selectedApplication.documents.idBack ? (
+                                      <img
+                                        src={
+                                          selectedApplication.documents.idBack
+                                        }
+                                        alt="ID Back"
+                                        className="w-full h-40 object-cover border rounded-lg"
+                                      />
+                                    ) : (
+                                      <span className="text-gray-400">
+                                        Not Provided
+                                      </span>
+                                    )}
+                                  </div>
+                                  <div className="space-y-2">
+                                    <label className="text-sm font-medium text-gray-600">
+                                      Selfie
+                                    </label>
+                                    {selectedApplication.documents.selfie ? (
+                                      <img
+                                        src={
+                                          selectedApplication.documents.selfie
+                                        }
+                                        alt="Selfie"
+                                        className="w-full h-40 object-cover border rounded-lg"
+                                      />
+                                    ) : (
+                                      <span className="text-gray-400">
+                                        Not Provided
+                                      </span>
+                                    )}
+                                  </div>
+                                  <div className="space-y-2">
+                                    <label className="text-sm font-medium text-gray-600">
+                                      Proof of Address
+                                    </label>
+                                    {selectedApplication.documents
+                                      .proofOfAddress ? (
+                                      <img
+                                        src={
+                                          selectedApplication.documents
+                                            .proofOfAddress
+                                        }
+                                        alt="Proof of Address"
+                                        className="w-full h-40 object-cover border rounded-lg"
+                                      />
+                                    ) : (
+                                      <span className="text-gray-400">
+                                        Not Provided
+                                      </span>
+                                    )}
+                                  </div>
+                                </div>
+                              </div>
 
-                            {/* Action Buttons */}
-                            <div className="flex justify-end space-x-3 pt-4 border-t">
-                              <Button
-                                variant="outline"
-                                className="text-red-600 border-red-200 hover:bg-red-50"
-                                onClick={() =>
-                                  handleReject(
-                                    selectedApplication.id,
-                                    reviewNotes
-                                  )
-                                }
-                              >
-                                <X className="w-4 h-4 mr-2" />
-                                Reject Application
-                              </Button>
-                              <Button
-                                className="bg-green-600 hover:bg-green-700"
-                                onClick={() =>
-                                  handleApprove(selectedApplication.id)
-                                }
-                              >
-                                <Check className="w-4 h-4 mr-2" />
-                                Approve Application
-                              </Button>
+                              {/* Review Notes */}
+                              <div className="space-y-2">
+                                <label className="text-sm font-medium text-gray-600">
+                                  Review Notes
+                                </label>
+                                <Textarea
+                                  value={reviewNotes}
+                                  onChange={(e) =>
+                                    setReviewNotes(e.target.value)
+                                  }
+                                  placeholder="Add notes about the verification..."
+                                  rows={3}
+                                />
+                              </div>
+
+                              {/* Action Buttons */}
+                              <div className="flex justify-end space-x-3 pt-4 border-t">
+                                <Button
+                                  variant="outline"
+                                  className="text-red-600 border-red-200 hover:bg-red-50"
+                                  onClick={() =>
+                                    handleReject(
+                                      selectedApplication.id,
+                                      reviewNotes
+                                    )
+                                  }
+                                >
+                                  <X className="w-4 h-4 mr-2" />
+                                  Reject Application
+                                </Button>
+                                <Button
+                                  className="bg-green-600 hover:bg-green-700"
+                                  onClick={() =>
+                                    handleApprove(selectedApplication.id)
+                                  }
+                                >
+                                  <Check className="w-4 h-4 mr-2" />
+                                  Approve Application
+                                </Button>
+                              </div>
                             </div>
-                          </div>
-                        )}
+                          )}
                       </DialogContent>
                     </Dialog>
                   </td>
