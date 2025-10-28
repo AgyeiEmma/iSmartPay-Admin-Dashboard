@@ -3,7 +3,7 @@
  * Handles HTTP requests with error handling and CORS support
  */
 
-const API_BASE_URL = 'http://18.116.165.182:5600/auth-service/api';
+const API_BASE_URL = '/api';
 
 /**
  * Generic API request handler with error handling
