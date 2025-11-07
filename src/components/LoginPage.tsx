@@ -22,7 +22,7 @@ export function LoginPage({ onLogin }: LoginPageProps) {
     setLoading(true);
     try {
       const response = await fetch(
-        "http://18.116.165.182:5600/auth-service/api/publicauth/admin/login",
+        "http://3.17.140.162:5600/auth-service/api/publicauth/admin/login",
         {
           method: "POST",
           headers: {
@@ -31,6 +31,8 @@ export function LoginPage({ onLogin }: LoginPageProps) {
           body: JSON.stringify({ email, password }),
         }
       );
+
+      console.log("Login response:", response);
 
       if (!response.ok) {
         const data = await response.json().catch(() => ({}));

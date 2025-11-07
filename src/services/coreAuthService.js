@@ -3,7 +3,7 @@
  * Handles user login, registration, and password management
  */
 
-import { apiRequest } from './apiClient.js';
+import { apiRequest } from "./apiClient.js";
 
 /**
  * Core Authentication Service
@@ -13,17 +13,17 @@ export const authService = {
    * User Login
    */
   async login(email, password) {
-    console.log('🔍 Login attempt for:', email);
+    console.log("🔍 Login attempt for:", email);
 
-    const data = await apiRequest('/publicauth/login', {
-      method: 'POST',
+    const data = await apiRequest("/publicauth/login", {
+      method: "POST",
       body: JSON.stringify({
         email: email.trim(),
         password: password,
       }),
     });
 
-    console.log('✅ Login successful for:', email);
+    console.log("✅ Login successful for:", email);
     return data;
   },
 
@@ -31,10 +31,10 @@ export const authService = {
    * User Registration (Individual)
    */
   async register(userData) {
-    console.log('🔍 Individual registration for:', userData.email);
+    console.log("🔍 Individual registration for:", userData.email);
 
-    const data = await apiRequest('/publicauth/register', {
-      method: 'POST',
+    const data = await apiRequest("/publicauth/register", {
+      method: "POST",
       body: JSON.stringify({
         first_name: userData.firstName || userData.first_name,
         middle_name: userData.middleName || userData.middle_name,
@@ -46,7 +46,7 @@ export const authService = {
       }),
     });
 
-    console.log('✅ Individual registration successful for:', userData.email);
+    console.log("✅ Individual registration successful for:", userData.email);
     return data;
   },
 
@@ -54,14 +54,14 @@ export const authService = {
    * Business Registration
    */
   async registerBusiness(businessData) {
-    console.log('🔍 Business registration request data:', businessData);
+    console.log("🔍 Business registration request data:", businessData);
 
-    const data = await apiRequest('/publicauth/register-business', {
-      method: 'POST',
+    const data = await apiRequest("/publicauth/register-business", {
+      method: "POST",
       body: JSON.stringify(businessData),
     });
 
-    console.log('✅ Business registration success:', data);
+    console.log("✅ Business registration success:", data);
     return data;
   },
 
@@ -69,14 +69,14 @@ export const authService = {
    * Forgot Password Request
    */
   async requestPasswordReset(email) {
-    console.log('🔍 Password reset request for:', email);
+    console.log("🔍 Password reset request for:", email);
 
-    const data = await apiRequest('/publicauth/password/request-reset', {
-      method: 'POST',
+    const data = await apiRequest("/publicauth/password/request-reset", {
+      method: "POST",
       body: JSON.stringify({ email }),
     });
 
-    console.log('✅ Password reset request sent for:', email);
+    console.log("✅ Password reset request sent for:", email);
     return data;
   },
 
@@ -84,10 +84,10 @@ export const authService = {
    * Password Reset with OTP
    */
   async resetPasswordWithOTP(email, otp, newPassword) {
-    console.log('🔍 Password reset with OTP for:', email);
+    console.log("🔍 Password reset with OTP for:", email);
 
-    const resetData = await apiRequest('/publicauth/password/reset-with-otp', {
-      method: 'POST',
+    const resetData = await apiRequest("/publicauth/password/reset-with-otp", {
+      method: "POST",
       body: JSON.stringify({
         email,
         otp,
@@ -95,7 +95,7 @@ export const authService = {
       }),
     });
 
-    console.log('✅ Password reset with OTP successful');
+    console.log("✅ Password reset with OTP successful");
     return resetData;
   },
 
@@ -103,17 +103,17 @@ export const authService = {
    * Change Password (Authenticated)
    */
   async changePassword(oldPassword, newPassword) {
-    const token = localStorage.getItem('authToken');
+    const token = localStorage.getItem("authToken");
     if (!token) {
-      throw new Error('Authentication required');
+      throw new Error("Authentication required");
     }
 
-    console.log('🔍 Password change request');
+    console.log("🔍 Password change request");
 
-    const changeData = await apiRequest('/auth/password/change', {
-      method: 'POST',
+    const changeData = await apiRequest("/auth/password/change", {
+      method: "POST",
       headers: {
-        'Authorization': `Bearer ${token}`,
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
         oldPassword,
@@ -121,7 +121,7 @@ export const authService = {
       }),
     });
 
-    console.log('✅ Password change successful');
+    console.log("✅ Password change successful");
     return changeData;
   },
 
@@ -129,21 +129,21 @@ export const authService = {
    * Get User Verification Level
    */
   async getVerificationLevel() {
-    const token = localStorage.getItem('authToken');
+    const token = localStorage.getItem("authToken");
     if (!token) {
-      throw new Error('Authentication required');
+      throw new Error("Authentication required");
     }
 
-    console.log('🔍 Fetching verification level');
+    console.log("🔍 Fetching verification level");
 
-    const data = await apiRequest('/publicauth/get-verification-level', {
-      method: 'GET',
+    const data = await apiRequest("/publicauth/get-verification-level", {
+      method: "GET",
       headers: {
-        'Authorization': `Bearer ${token}`,
+        Authorization: `Bearer ${token}`,
       },
     });
 
-    console.log('✅ Verification level fetched');
+    console.log("✅ Verification level fetched");
     return data;
   },
 
@@ -151,16 +151,16 @@ export const authService = {
    * Verify Email (Public)
    */
   async verifyEmail(verificationToken) {
-    console.log('🔍 Verifying email address');
+    console.log("🔍 Verifying email address");
 
-    const verifyEmailData = await apiRequest('/auth/verify-email', {
-      method: 'POST',
+    const verifyEmailData = await apiRequest("/auth/verify-email", {
+      method: "POST",
       body: JSON.stringify({
         token: verificationToken,
       }),
     });
 
-    console.log('✅ Email verified successfully');
+    console.log("✅ Email verified successfully");
     return verifyEmailData;
   },
 };

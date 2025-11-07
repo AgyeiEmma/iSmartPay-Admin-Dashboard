@@ -69,7 +69,7 @@ const AdminManagement: React.FC = () => {
     setError(null);
     try {
       const response = await fetch(
-        "http://18.116.165.182:5600/auth-service/api/admin/admins",
+        "http://3.17.140.162:5600/auth-service/api/admin/admins",
         {
           method: "GET",
           headers: {
@@ -78,6 +78,8 @@ const AdminManagement: React.FC = () => {
           },
         }
       );
+      console.log("this is the response" + response);
+
       if (!response.ok) {
         const data = await response.json().catch(() => ({}));
         throw new Error(data.message || "Failed to fetch admins");
@@ -139,7 +141,7 @@ const AdminManagement: React.FC = () => {
   const getRoles = async () => {
     try {
       const response = await fetch(
-        "http://18.116.165.182:5600/auth-service/api/admin/roles",
+        "http://3.17.140.162:5600/auth-service/api/admin/roles",
         {
           method: "GET",
           headers: {
@@ -197,7 +199,7 @@ const AdminManagement: React.FC = () => {
       }
 
       const response = await fetch(
-        `http://18.116.165.182:5600/auth-service/api/admin/admins/${selectedAdmin.id}/role`,
+        `http://3.17.140.162:5600/auth-service/api/admin/admins/${selectedAdmin.id}/role`,
         {
           method: "PUT",
           headers: {
@@ -241,7 +243,7 @@ const AdminManagement: React.FC = () => {
       }
 
       const response = await fetch(
-        `http://18.116.165.182:5600/auth-service/api/admin/admins/${selectedAdmin.id}`,
+        `http://3.17.140.162:5600/auth-service/api/admin/admins/${selectedAdmin.id}`,
         {
           method: "DELETE",
           headers: {

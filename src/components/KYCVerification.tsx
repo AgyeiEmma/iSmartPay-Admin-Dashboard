@@ -24,91 +24,75 @@ import {
 
 // API Base URL
 const API_BASE_URL =
-  "http://18.116.165.182:5600/auth-service/api/reviews/kyc-documents";
+  "http://3.17.140.162:5600/auth-service/api/reviews/kyc-documents";
 
-const mockKycApplications = [
-  {
-    id: "KYC001",
-    userId: "USR001",
-    userName: "Kwame Asante",
-    email: "kwame.asante@email.com",
-    submittedDate: "2024-10-05",
-    status: "Pending Review",
-    documentType: "Ghana Card",
-    documents: {
-      idFront: "/api/placeholder/400/250",
-      idBack: "/api/placeholder/400/250",
-      selfie: "/api/placeholder/300/300",
-      proofOfAddress: "/api/placeholder/400/250",
-    },
-    personalInfo: {
-      fullName: "Kwame Asante",
-      dateOfBirth: "1995-03-15",
-      idNumber: "GHA-123456789-0",
-      address: "123 Liberation Road, Accra",
-      occupation: "Software Developer",
-    },
-    reviewNotes: "",
-  },
-  {
-    id: "KYC002",
-    userId: "USR002",
-    userName: "Ama Boateng",
-    email: "ama.boateng@email.com",
-    submittedDate: "2024-10-03",
-    status: "Under Review",
-    documentType: "Passport",
-    documents: {
-      idFront: "/api/placeholder/400/250",
-      idBack: "/api/placeholder/400/250",
-      selfie: "/api/placeholder/300/300",
-      proofOfAddress: "/api/placeholder/400/250",
-    },
-    personalInfo: {
-      fullName: "Ama Boateng",
-      dateOfBirth: "1992-08-22",
-      idNumber: "P-87654321",
-      address: "456 Independence Ave, Kumasi",
-      occupation: "Teacher",
-    },
-    reviewNotes: "Address document needs verification",
-  },
-  {
-    id: "KYC003",
-    userId: "USR003",
-    userName: "Kofi Mensah",
-    email: "kofi.mensah@email.com",
-    submittedDate: "2024-09-28",
-    status: "Rejected",
-    documentType: "Ghana Card",
-    documents: {
-      idFront: "/api/placeholder/400/250",
-      idBack: "/api/placeholder/400/250",
-      selfie: "/api/placeholder/300/300",
-      proofOfAddress: "/api/placeholder/400/250",
-    },
-    personalInfo: {
-      fullName: "Kofi Mensah",
-      dateOfBirth: "1988-12-10",
-      idNumber: "GHA-987654321-5",
-      address: "789 Castle Road, Cape Coast",
-      occupation: "Trader",
-    },
-    reviewNotes: "Blurry ID document, selfie does not match ID",
-  },
-];
+// Transform dbResponse to match the UI structure
+const transformDbResponse = (dbData: any[]) => {
+  return dbData.map((item) => {
+    const customer = item.customer || {};
+    const user = item.users || {};
+
+    // Extract name - if customer, show "FirstName LastName", if user, show full_name
+    let userName = "-";
+    let fullName = "-";
+
+    if (customer && customer.first_name) {
+      // It's a customer - combine first_name and last_name
+      userName = `${customer.first_name} ${customer.last_name || ""}`.trim();
+      fullName = userName;
+    } else if (user && user.full_name) {
+      // It's a user - use full_name directly
+      userName = user.full_name;
+      fullName = user.full_name;
+    }
+
+    console.log("Transforming KYC item:", item);
+
+    return {
+      // Always use the backend UUID for all actions and display
+      id: item.id, // UUID for review actions and display
+      userId: item.customer_id || item.user_id,
+      userName: userName,
+      email: customer.email || user.email || "-",
+      submittedDate: item.created_at
+        ? new Date(item.created_at).toLocaleDateString()
+        : "-",
+      status: item.status || "PENDING",
+      documentType: item.document_type?.replace(/_/g, " ") || "Ghana Card",
+      documents: {
+        idFront: item.document_front_url || null,
+        idBack: item.document_back_url || null,
+        selfie: item.selfie_url || null,
+        proofOfAddress: null,
+      },
+      personalInfo: {
+        fullName: fullName,
+        dateOfBirth: user.dob || "-",
+        idNumber: "-",
+        address: user.residential_address || "-",
+        occupation: "-",
+      },
+      reviewNotes: item.review_notes || "",
+      // reviewer info when available from list endpoint
+      reviewedBy: item.reviewed_by || item.reviewedBy || item.reviewer || null,
+    };
+  });
+};
 
 export function KYCVerification() {
   const [kycApplications, setKycApplications] = useState<any[]>([]);
   const [selectedApplication, setSelectedApplication] = useState<any>(null);
   const [reviewNotes, setReviewNotes] = useState("");
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [loadingDetails, setLoadingDetails] = useState(false);
 
   // Fetch KYC applications on component mount
 
   useEffect(() => {
     fetchKYCApplications();
+    // Only fetch once on mount
+    // Remove any interval or repeated fetch logic
   }, []);
 
   // Helper to safely get nested values
@@ -121,100 +105,101 @@ export function KYCVerification() {
     }
   };
 
+ 
+
   const fetchKYCApplications = async () => {
     setLoading(true);
     setError(null);
+    let mapped: any[] = [];
     try {
       const token = localStorage.getItem("authToken");
       if (!token) {
         throw new Error("No authentication token found. Please log in.");
       }
 
-      const response = await fetch(
-        `${API_BASE_URL}/api/auth/profile/kyc-docs`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        throw new Error(
-          errorData.message || "Failed to fetch KYC applications"
-        );
-      }
-
-      const data = await response.json();
-      // Expecting data.data as array of KYC applications
-      let kycData: any[] = [];
-      if (Array.isArray(data)) {
-        kycData = data;
-      } else if (data.data && Array.isArray(data.data)) {
-        kycData = data.data;
-      } else if (data.applications && Array.isArray(data.applications)) {
-        kycData = data.applications;
-      }
-
-      // Map to flat structure for UI
-      const mapped = kycData.map((item) => {
-        // Sample API: { id, status, submittedAt, documentType, customer: { ... }, users: [ ... ] }
-        const customer = item.customer || {};
-        const user = (item.users && item.users[0]) || {};
-        // Documents may be nested or null
-        const docs = item.documents || {};
-        return {
-          id: item.id || safe(() => item._id),
-          userName: safe(
-            () => user.fullName,
-            safe(() => customer.fullName, "-")
-          ),
-          email: safe(
-            () => user.email,
-            safe(() => customer.email, "-")
-          ),
-          submittedDate: safe(() => item.submittedAt, "-"),
-          status: safe(() => item.status, "-"),
-          documentType: safe(() => item.documentType, "-"),
-          documents: {
-            idFront: safe(() => docs.idFrontUrl, null),
-            idBack: safe(() => docs.idBackUrl, null),
-            selfie: safe(() => docs.selfieUrl, null),
-            proofOfAddress: safe(() => docs.proofOfAddressUrl, null),
-          },
-          personalInfo: {
-            fullName: safe(
-              () => user.fullName,
-              safe(() => customer.fullName, "-")
-            ),
-            dateOfBirth: safe(
-              () => user.dateOfBirth,
-              safe(() => customer.dateOfBirth, "-")
-            ),
-            idNumber: safe(
-              () => user.idNumber,
-              safe(() => customer.idNumber, "-")
-            ),
-            address: safe(
-              () => user.address,
-              safe(() => customer.address, "-")
-            ),
-            occupation: safe(
-              () => user.occupation,
-              safe(() => customer.occupation, "-")
-            ),
-          },
-          reviewNotes: safe(() => item.reviewNotes, ""),
-        };
+      const response = await fetch(`${API_BASE_URL}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
       });
+
+      let kycData: any[] = [];
+      if (response.ok) {
+        const data = await response.json();
+
+        if (Array.isArray(data)) {
+          kycData = data;
+        } else if (data.data && Array.isArray(data.data)) {
+          kycData = data.data;
+        } else if (data.applications && Array.isArray(data.applications)) {
+          kycData = data.applications;
+        }
+      }
+
+      // If API returns no data, fallback to mock
+      if (!kycData || kycData.length === 0) {
+        // mapped = transformDbResponse(dbResponse);
+        console.log("API returned no KYC data, using mock data instead.");
+      } else {
+        mapped = transformDbResponse(kycData);
+        //   mapped = kycData.map((item) => {
+        //     const customer = item.customer || {};
+        //     const user = (item.users && item.users[0]) || {};
+        //     const docs = item.documents || {};
+        //     return {
+        //       id: item.id || safe(() => item._id),
+        //       userName: safe(
+        //         () => user.fullName,
+        //         safe(() => customer.fullName, "-")
+        //       ),
+        //       email: safe(
+        //         () => user.email,
+        //         safe(() => customer.email, "-")
+        //       ),
+        //       submittedDate: safe(() => item.submittedAt, "-"),
+        //       status: safe(() => item.status, "-"),
+        //       documentType: safe(() => item.documentType, "-"),
+        //       documents: {
+        //         idFront: safe(() => docs.idFrontUrl, null),
+        //         idBack: safe(() => docs.idBackUrl, null),
+        //         selfie: safe(() => docs.selfieUrl, null),
+        //         proofOfAddress: safe(() => docs.proofOfAddressUrl, null),
+        //       },
+        //       personalInfo: {
+        //         fullName: safe(
+        //           () => user.fullName,
+        //           safe(() => customer.fullName, "-")
+        //         ),
+        //         dateOfBirth: safe(
+        //           () => user.dateOfBirth,
+        //           safe(() => customer.dateOfBirth, "-")
+        //         ),
+        //         idNumber: safe(
+        //           () => user.idNumber,
+        //           safe(() => customer.idNumber, "-")
+        //         ),
+        //         address: safe(
+        //           () => user.address,
+        //           safe(() => customer.address, "-")
+        //         ),
+        //         occupation: safe(
+        //           () => user.occupation,
+        //           safe(() => customer.occupation, "-")
+        //         ),
+        //       },
+        //       reviewNotes: safe(() => item.reviewNotes, ""),
+        //     };
+        //   });
+      }
       setKycApplications(mapped);
     } catch (err: any) {
       setError(err.message || "Failed to load KYC applications");
       console.error("Error fetching KYC applications:", err);
-      setKycApplications([]);
+      // Always fallback to mock data if API fails
+      // mapped = transformDbResponse(dbResponse);
+      setKycApplications(mapped);
     } finally {
       setLoading(false);
     }
@@ -250,15 +235,189 @@ export function KYCVerification() {
     }
   };
 
-  const handleApprove = (applicationId: string) => {
-    console.log("Approving KYC application:", applicationId);
-    // Implementation for approving KYC
+  const updateApplicationStatus = (
+    applicationId: string,
+    status: string,
+    reviewer: any
+  ) => {
+    setKycApplications((prevApplications) =>
+      prevApplications.map((application) =>
+        application.id === applicationId
+          ? {
+              ...application,
+              status,
+              reviewedBy: reviewer,
+            }
+          : application
+      )
+    );
   };
 
-  const handleReject = (applicationId: string, notes: string) => {
-    console.log("Rejecting KYC application:", applicationId, "Notes:", notes);
-    // Implementation for rejecting KYC
+  // Approve KYC Application
+  const handleApprove = async (application: string) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const token = localStorage.getItem("authToken");
+      if (!token)
+        throw new Error("No authentication token found. Please log in.");
+      const response = await fetch(`${API_BASE_URL}/${application}/review`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          status: "APPROVED",
+          review_notes: reviewNotes,
+        }),
+      });
+      console.log(response);
+      if (response.ok) {
+        const reviewer = {
+          first_name: "Admin",
+          last_name: "User",
+          email: "admin@example.com",
+        }; // Mock reviewer info
+        // updateApplicationStatus(applicationId, "APPROVED", reviewer);
+        setSelectedApplication(null); // Clear dialog state
+      } else {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Failed to approve application");
+      }
+    } catch (err: any) {
+      setError(err.message || "Failed to approve application");
+    } finally {
+      setLoading(false);
+    }
   };
+
+  // Reject KYC Application
+  const handleReject = async (applicationId: string, notes: string) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const token = localStorage.getItem("authToken");
+      if (!token)
+        throw new Error("No authentication token found. Please log in.");
+      const response = await fetch(`${API_BASE_URL}/${applicationId}/review`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          status: "REJECTED",
+          review_notes: notes,
+        }),
+      });
+      if (response.ok) {
+        const reviewer = {
+          first_name: "Admin",
+          last_name: "User",
+          email: "admin@example.com",
+        }; // Mock reviewer info
+        updateApplicationStatus(applicationId, "REJECTED", reviewer);
+        setSelectedApplication(null); // Clear dialog state
+      } else {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Failed to reject application");
+      }
+    } catch (err: any) {
+      setError(err.message || "Failed to reject application");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Fetch detailed KYC document when Review button is clicked
+  const fetchKYCDocumentDetails = async (documentId: string) => {
+    console.log("🔍 Fetching KYC document details for ID:", documentId);
+    setLoadingDetails(true);
+    try {
+      const token = localStorage.getItem("authToken");
+      if (!token) {
+        setError("No authentication token found. Please log in.");
+        setLoadingDetails(false);
+        return;
+      }
+      const response = await fetch(`${API_BASE_URL}/${documentId}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      let data: any = null;
+      if (response.ok) {
+        const apiData = await response.json();
+        data = apiData.data || apiData;
+      } else {
+        setError("Failed to fetch KYC document details from API.");
+        setLoadingDetails(false);
+        return;
+      }
+
+      // Transform the detailed data for the dialog
+      const customer: any = data.customer || {};
+      const user: any = data.users || {};
+
+      let userName = "-";
+      let fullName = "-";
+      if (customer && customer.first_name) {
+        userName = `${customer.first_name} ${customer.last_name || ""}`.trim();
+        fullName = userName;
+      } else if (user && user.full_name) {
+        userName = user.full_name;
+        fullName = user.full_name;
+      }
+
+      const s3_urls: any = data.s3_urls || {};
+
+      const detailedApplication = {
+        id: data.id,
+        application_id: data.application_id,
+        userId: data.customer_id || data.user_id,
+        userName: userName,
+        email: customer.email || user.email || "-",
+        submittedDate: data.created_at
+          ? new Date(data.created_at).toLocaleDateString()
+          : "-",
+        status: data.status || "PENDING",
+        documentType: data.document_type?.replace(/_/g, " ") || "Ghana Card",
+        documents: {
+          idFront:
+            s3_urls.document_front_url || data.document_front_url || null,
+          idBack: s3_urls.document_back_url || data.document_back_url || null,
+          selfie: s3_urls.selfie_url || data.selfie_url || null,
+          // proofOfAddress: s3_urls.proof_of_address_url || null,
+        },
+        personalInfo: {
+          fullName: fullName,
+          dateOfBirth: user.dob || "-",
+          idNumber: "-",
+          address: user.residential_address || "-",
+          occupation: "-",
+        },
+        reviewNotes: data.review_notes || "",
+        // reviewed_by may be present in the API response; normalize it here
+        reviewedBy:
+          data.reviewed_by || data.reviewedBy || data.reviewer || null,
+      };
+
+      console.log("Detailed KYC application data:", detailedApplication);
+
+      setSelectedApplication(detailedApplication);
+      setReviewNotes(detailedApplication.reviewNotes);
+    } catch (err: any) {
+      console.error("Error fetching KYC document details:", err);
+      setError(err.message || "Failed to load KYC document details");
+    } finally {
+      setLoadingDetails(false);
+    }
+  };
+
+  console.log("KYCVerification component rendered", selectedApplication && selectedApplication);
 
   return (
     <div className="space-y-6">
@@ -307,6 +466,9 @@ export function KYCVerification() {
                   Status
                 </th>
                 <th className="text-left py-3 px-4 text-sm font-medium text-gray-600">
+                  Reviewed By
+                </th>
+                <th className="text-left py-3 px-4 text-sm font-medium text-gray-600">
                   Actions
                 </th>
               </tr>
@@ -318,6 +480,7 @@ export function KYCVerification() {
                   className="border-b border-gray-100 hover:bg-gray-50"
                 >
                   <td className="py-3 px-4 text-sm font-medium text-gray-900">
+                    {/* Display UUID for clarity and correct API usage */}
                     {application.id}
                   </td>
                   <td className="py-3 px-4">
@@ -346,6 +509,13 @@ export function KYCVerification() {
                       <span>{application.status}</span>
                     </Badge>
                   </td>
+                  <td className="py-3 px-4 text-sm text-gray-900">
+                    {application.reviewedBy
+                      ? `${application.reviewedBy.first_name || ""} ${
+                          application.reviewedBy.last_name || ""
+                        }`.trim() || application.reviewedBy.email
+                      : "N/A"}
+                  </td>
                   <td className="py-3 px-4">
                     <Dialog>
                       <DialogTrigger asChild>
@@ -353,8 +523,8 @@ export function KYCVerification() {
                           variant="outline"
                           size="sm"
                           onClick={() => {
-                            setSelectedApplication(application);
-                            setReviewNotes(application.reviewNotes);
+                            // Always use UUID for review details
+                            fetchKYCDocumentDetails(application.id);
                           }}
                         >
                           <Eye className="w-4 h-4 mr-2" />
@@ -364,11 +534,19 @@ export function KYCVerification() {
                       <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
                         <DialogHeader>
                           <DialogTitle>
-                            KYC Review - {application.userName}
+                            KYC Review -{" "}
+                            {selectedApplication?.userName ||
+                              application.userName}
                           </DialogTitle>
                         </DialogHeader>
-                        {selectedApplication &&
-                          selectedApplication.id === application.id && (
+                        {loadingDetails ? (
+                          <div className="flex justify-center items-center py-8">
+                            <p className="text-gray-500">
+                              Loading document details...
+                            </p>
+                          </div>
+                        ) : (
+                          selectedApplication && (
                             <div className="space-y-6">
                               {/* Personal Information */}
                               <div className="border rounded-lg p-4">
@@ -516,6 +694,37 @@ export function KYCVerification() {
                                 </div>
                               </div>
 
+                              {/* Reviewed By */}
+                              <div className="border rounded-lg p-4">
+                                <h3 className="font-semibold text-gray-900 mb-3 flex items-center">
+                                  <User className="w-5 h-5 mr-2" />
+                                  Reviewed By
+                                </h3>
+                                {selectedApplication.reviewedBy ? (
+                                  <div className="space-y-1">
+                                    <p className="text-sm text-gray-900 font-medium">
+                                      {selectedApplication.reviewedBy
+                                        .first_name || ""}{" "}
+                                      {selectedApplication.reviewedBy
+                                        .last_name || ""}
+                                    </p>
+                                    <p className="text-sm text-gray-500">
+                                      {selectedApplication.reviewedBy.email ||
+                                        "-"}
+                                    </p>
+                                    {selectedApplication.reviewedBy.phone && (
+                                      <p className="text-sm text-gray-500">
+                                        {selectedApplication.reviewedBy.phone}
+                                      </p>
+                                    )}
+                                  </div>
+                                ) : (
+                                  <p className="text-sm text-gray-500">
+                                    Not reviewed yet
+                                  </p>
+                                )}
+                              </div>
+
                               {/* Review Notes */}
                               <div className="space-y-2">
                                 <label className="text-sm font-medium text-gray-600">
@@ -542,6 +751,11 @@ export function KYCVerification() {
                                       reviewNotes
                                     )
                                   }
+                                  disabled={
+                                    loadingDetails ||
+                                    loading ||
+                                    !selectedApplication?.id
+                                  }
                                 >
                                   <X className="w-4 h-4 mr-2" />
                                   Reject Application
@@ -549,7 +763,12 @@ export function KYCVerification() {
                                 <Button
                                   className="bg-green-600 hover:bg-green-700"
                                   onClick={() =>
-                                    handleApprove(selectedApplication.id)
+                                    handleApprove(selectedApplication?.id)
+                                  }
+                                  disabled={
+                                    loadingDetails ||
+                                    loading ||
+                                    !selectedApplication?.id
                                   }
                                 >
                                   <Check className="w-4 h-4 mr-2" />
@@ -557,7 +776,8 @@ export function KYCVerification() {
                                 </Button>
                               </div>
                             </div>
-                          )}
+                          )
+                        )}
                       </DialogContent>
                     </Dialog>
                   </td>

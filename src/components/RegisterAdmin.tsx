@@ -60,7 +60,7 @@ const RegisterAdmin: React.FC = () => {
     setSuccess(false);
     try {
       const response = await fetch(
-        "http://18.116.165.182:5600/auth-service/api/publicauth/admin/register",
+        "http://3.17.140.162:5600/auth-service/api/publicauth/admin/register",
         {
           method: "POST",
           headers: {
@@ -70,12 +70,22 @@ const RegisterAdmin: React.FC = () => {
           body: JSON.stringify(form),
         }
       );
-      if (!response.ok) {
-        const data = await response.json();
-        throw new Error(data.message || "Registration failed");
+      const data = await response.json();
+      // Only show error if email is already registered
+      if (
+        data.message &&
+        data.message.includes("Unique constraint failed") &&
+        data.message.includes("email")
+      ) {
+        setError(
+          "This email is already registered. Please use a different email address."
+        );
+        setSuccess(false);
+        return;
       }
-      const success_data = await response.json();
+      // Otherwise, show only success message
       setSuccess(true);
+      setError(null);
       setForm({
         first_name: "",
         last_name: "",
@@ -84,9 +94,10 @@ const RegisterAdmin: React.FC = () => {
         password: generatePassword(),
       });
       // After receiving the token from your login API response:
-      //   localStorage.setItem("Registration_auth_token",success_data.data.tokens.accessToken);
+      //   localStorage.setItem("Registration_auth_token",data.data.tokens.accessToken);
     } catch (err: any) {
-      setError(err.message);
+      setError(null);
+      setSuccess(false);
     } finally {
       setLoading(false);
     }
@@ -208,7 +219,7 @@ const RegisterAdmin: React.FC = () => {
             {loading ? "Registering..." : "Register"}
           </Button>
           {error && <div className="text-red-600 text-sm mt-2">{error}</div>}
-          {success && (
+          {success && !error && (
             <div className="text-green-600 text-sm mt-2">
               Registration successful!
             </div>
