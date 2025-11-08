@@ -3,8 +3,7 @@ name: Build and Push to GHCR (Watchtower Auto-Deploy)
 on:
   push:
     branches:
-      - main
-      - master
+      - docker-container
   workflow_dispatch: # Allow manual trigger
 
 env:
