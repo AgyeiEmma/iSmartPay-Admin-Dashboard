@@ -1,34 +1,14 @@
-# Multi-stage build for Vite React Admin Dashboard
-# Stage 1: Build the application
-FROM node:20-alpine AS build
-WORKDIR /build
-
-# Copy package files for dependency installation
-COPY package*.json ./
-
-# Install all dependencies (including devDependencies needed for build)
-RUN npm ci
-
-# Copy source code
-COPY . .
-
-# Build the production-optimized static assets
-RUN npm run build
-
-# Stage 2: Production runtime with Nginx
+# Simple Dockerfile using pre-built assets
 FROM nginx:alpine
 WORKDIR /usr/share/nginx/html
 
 # Remove default nginx static assets
 RUN rm -rf ./*
 
-# Copy built assets from build stage
-COPY --from=build /build/dist .
+# Copy pre-built assets
+COPY build .
 
-# Copy custom nginx configuration if exists, otherwise use default
-# COPY nginx.conf /etc/nginx/conf.d/default.conf
-
-# Add a simple nginx configuration for SPA routing
+# Add nginx configuration for SPA routing
 RUN echo 'server { \
     listen 80; \
     server_name _; \
@@ -46,5 +26,5 @@ EXPOSE 80
 HEALTHCHECK --interval=30s --timeout=3s --start-period=10s --retries=3 \
   CMD wget --no-verbose --tries=1 --spider http://localhost/ || exit 1
 
-# Run nginx in foreground
+# Run nginx
 CMD ["nginx", "-g", "daemon off;"]
