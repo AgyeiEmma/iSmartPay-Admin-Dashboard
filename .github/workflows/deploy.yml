@@ -3,7 +3,12 @@ name: Build and Push to GHCR (Watchtower Auto-Deploy)
 on:
   push:
     branches:
-      - docker-container
+      - '**'  # Run on all branches
+    branches-ignore:
+      - 'release/**'  # Ignore release branches
+      - 'releases/**'
+    tags-ignore:
+      - '**'  # Ignore all tags (releases)
   workflow_dispatch: # Allow manual trigger
 
 env:
@@ -45,7 +50,7 @@ jobs:
           tags: |
             type=ref,event=branch
             type=sha,prefix={{branch}}-
-            type=raw,value=latest,enable={{is_default_branch}}
+            type=raw,value=latest
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
