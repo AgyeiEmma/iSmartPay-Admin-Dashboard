@@ -2,8 +2,6 @@ name: Build and Push to GHCR (Watchtower Auto-Deploy)
 
 on:
   push:
-    branches:
-      - '**'  # Run on all branches
     branches-ignore:
       - 'release/**'  # Ignore release branches
       - 'releases/**'
