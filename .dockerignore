@@ -4,9 +4,9 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# Build output
+# Build output (keep build directory for simple Dockerfile)
 dist
-build
+# build
 .netlify
 
 # IDE
